@@ -6,13 +6,13 @@
 </p>
 
 <p>
-  <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/svgs/solid/microchip.svg" width="16" height="16" alt="" aria-hidden="true">
+  <img src="./assets/icons/microchip-white.svg" width="16" height="16" alt="" aria-hidden="true">
   <strong>Hardware control</strong>
   &nbsp;&nbsp;
-  <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/svgs/solid/sliders.svg" width="16" height="16" alt="" aria-hidden="true">
+  <img src="./assets/icons/sliders-white.svg" width="16" height="16" alt="" aria-hidden="true">
   <strong>Desktop control modes</strong>
   &nbsp;&nbsp;
-  <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/svgs/solid/cloud-arrow-down.svg" width="16" height="16" alt="" aria-hidden="true">
+  <img src="./assets/icons/cloud-arrow-down-white.svg" width="16" height="16" alt="" aria-hidden="true">
   <strong>Automatic firmware flashing</strong>
 </p>
 
@@ -34,10 +34,9 @@ application is minimized to the tray.
 
 ## Features
 
-- Three operating modes:
-  - **Audio Master**: volume up, volume down, and play/pause.
-  - **Zoom/Scroll**: page scrolling and browser/editor zoom reset.
-  - **Virtual Desktops**: switch desktops and open Task View.
+- **Audio Master** mode: volume up, volume down, and play/pause.
+- **Zoom/Scroll** and **Virtual Desktops** modes are visible in the interface
+  but are not yet functional in this beta release.
 - Serial-port discovery through `pyserial`.
 - Firmware compilation and upload through the bundled `arduino-cli`.
 - Automatic installation of the Arduino AVR core and the `Encoder` library.
@@ -127,8 +126,9 @@ python gui\main.py
 2. Start Encoderino.
 3. Select the Arduino COM port.
 4. Click **Connetti**.
-5. Select an operating mode.
-6. Turn or press the rotary encoder to send actions to Windows.
+5. Select **Audio Master**.
+6. Turn or press the rotary encoder to control Windows volume or media
+   playback.
 
 The application discovers available serial ports when it starts. Use the
 refresh button if the Arduino is connected after the application launches.
@@ -184,8 +184,8 @@ Arduino Uno firmware
 Encoderino Python GUI
       |
       +--> Audio Master actions
-      +--> Zoom/Scroll actions
-      +--> Virtual Desktop actions
+      +--> Zoom/Scroll actions (planned)
+      +--> Virtual Desktop actions (planned)
       |
       +--> Arduino CLI compile/upload workflow
       +--> Windows system tray service
@@ -205,7 +205,11 @@ encoderino/
 ├── Windows/
 │   ├── Encoderino-Windows-Installer.exe
 │   └── Encoderino-Windows-Portable.zip
+├── assets/
+│   └── icons/
+│       └── *-white.svg
 ├── Encoderino.spec
+├── RELEASE_NOTES_v1.0.0-beta.md
 ├── requirements.txt
 └── README.md
 ```
