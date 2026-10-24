@@ -5,6 +5,7 @@ from tkinter import ttk
 import json
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 import serial
 import serial.tools.list_ports
@@ -28,7 +29,14 @@ class EncoderApp:
         self.reconnect_after_flash = False
         self.tray_icon = None
         self.tray_thread = None
-        self.project_root = Path(__file__).resolve().parent.parent
+        if getattr(sys, "frozen", False):
+            executable_root = Path(sys.executable).resolve().parent
+            internal_root = executable_root / "_internal"
+            self.project_root = (
+                internal_root if internal_root.is_dir() else executable_root
+            )
+        else:
+            self.project_root = Path(__file__).resolve().parent.parent
 
         # Variabili di stato GUI
         self.port_var = tk.StringVar()
@@ -308,7 +316,8 @@ class EncoderApp:
                     line = self.serial_port.readline().decode('utf-8').strip()
                     if line:
                         self.handle_command(line)
-            except Exception:
+            except (serial.SerialException, UnicodeDecodeError) as error:
+                print(f"Errore nella lettura seriale: {error}")
                 break
             time.sleep(0.01)
 
