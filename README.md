@@ -89,9 +89,9 @@ active-low: pressing it connects Digital 4 to ground.
 
 Download one of the prepared packages from [Windows](./Windows/):
 
-- [Encoderino-Windows-Installer.exe](./Windows/Encoderino-Windows-Installer.exe)
+- [Encoderino-Windows-Installer-v1.0.0-beta2.exe](./Windows/Encoderino-Windows-Installer-v1.0.0-beta2.exe)
   installs Encoderino for the current Windows user and creates shortcuts.
-- [Encoderino-Windows-Portable.zip](./Windows/Encoderino-Windows-Portable.zip)
+- [Encoderino-Windows-Installer-v1.0.0-beta2.zip](./Windows/Encoderino-Windows-Installer-v1.0.0-beta2.zip)
   can be extracted and run without an installation step.
 
 Both packages include the application, firmware source, and
@@ -220,8 +220,9 @@ encoderino/
 │   └── arduino-cli/
 │       └── arduino-cli.exe
 ├── Windows/
-│   ├── Encoderino-Windows-Installer.exe
-│   └── Encoderino-Windows-Portable.zip
+│   ├── Encoderino-Windows-Installer-v1.0.0-beta2.exe
+│   ├── Encoderino-Windows-Installer-v1.0.0-beta2.zip
+│   └── Encoderino-Windows-Installer.exe
 ├── assets/
 │   └── icons/
 │       └── *-white.svg
