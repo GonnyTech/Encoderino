@@ -9,6 +9,8 @@ from pathlib import Path
 import serial
 import serial.tools.list_ports
 import pyautogui
+import pystray
+from PIL import Image, ImageDraw
 
 # Disattiva il fail-safe di PyAutoGUI per evitare blocchi improvvisi muovendo il mouse agli angoli
 pyautogui.FAILSAFE = False
@@ -24,6 +26,8 @@ class EncoderApp:
         self.is_running = False
         self.flash_running = False
         self.reconnect_after_flash = False
+        self.tray_icon = None
+        self.tray_thread = None
         self.project_root = Path(__file__).resolve().parent.parent
 
         # Variabili di stato GUI
@@ -33,6 +37,7 @@ class EncoderApp:
 
         self.create_widgets()
         self.refresh_ports()
+        self.root.protocol("WM_DELETE_WINDOW", self.minimize_to_tray)
 
     def create_widgets(self):
         # Frame Connessione Seriale
@@ -90,6 +95,54 @@ class EncoderApp:
         self.port_combo['values'] = ports
         if ports:
             self.port_combo.current(0)
+
+    def create_tray_image(self):
+        image = Image.new("RGB", (64, 64), "white")
+        draw = ImageDraw.Draw(image)
+        draw.ellipse((8, 8, 56, 56), fill="#2563eb")
+        draw.ellipse((24, 24, 40, 40), fill="white")
+        return image
+
+    def minimize_to_tray(self):
+        self.root.withdraw()
+        if self.tray_icon is not None:
+            return
+
+        menu = pystray.Menu(
+            pystray.MenuItem("Apri Encoderino", self.restore_from_tray, default=True),
+            pystray.MenuItem("Esci", self.quit_application),
+        )
+        self.tray_icon = pystray.Icon(
+            "encoderino",
+            self.create_tray_image(),
+            "Encoderino",
+            menu,
+        )
+        self.tray_thread = threading.Thread(target=self.tray_icon.run, daemon=True)
+        self.tray_thread.start()
+
+    def restore_from_tray(self, icon=None, item=None):
+        self.root.after(0, self._restore_from_tray)
+
+    def _restore_from_tray(self):
+        if self.tray_icon is not None:
+            self.tray_icon.stop()
+            self.tray_icon = None
+        self.root.deiconify()
+        self.root.lift()
+        self.root.focus_force()
+
+    def quit_application(self, icon=None, item=None):
+        self.root.after(0, self._quit_application)
+
+    def _quit_application(self):
+        self.is_running = False
+        if self.serial_port and self.serial_port.is_open:
+            self.serial_port.close()
+        if self.tray_icon is not None:
+            self.tray_icon.stop()
+            self.tray_icon = None
+        self.root.destroy()
 
     def find_arduino_cli(self):
         candidates = [
