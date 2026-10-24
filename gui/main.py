@@ -354,9 +354,9 @@ class EncoderApp:
             elif cmd == "ENC_LEFT" and self.zoom_modifier_active:
                 pyautogui.hotkey("ctrl", "-")
             elif cmd == "ENC_RIGHT":
-                pyautogui.scroll(-5) # Scroll giù (o zoom out)
+                pyautogui.scroll(-10) # Scroll giù (o zoom out)
             elif cmd == "ENC_LEFT":
-                pyautogui.scroll(5)  # Scroll sù (o zoom in)
+                pyautogui.scroll(10)  # Scroll sù (o zoom in)
             elif cmd == "ENC_CLICK":
                 pyautogui.hotkey('ctrl', '0') # Reset zoom
 
