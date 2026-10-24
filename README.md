@@ -35,8 +35,13 @@ application is minimized to the tray.
 ## Features
 
 - **Audio Master** mode: volume up, volume down, and play/pause.
-- **Zoom/Scroll** and **Virtual Desktops** modes are visible in the interface
-  but are not yet functional in this beta release.
+- **Zoom/Scroll** mode with a latched five-second button modifier:
+  - Normal rotation scrolls.
+  - Hold the button for five seconds to switch to Zoom mode.
+  - Rotate while Zoom mode is active to zoom in or out.
+  - Hold the button for five seconds again to return to Scroll mode.
+- **Virtual Desktops** mode is visible in the interface but is not yet
+  functional.
 - Serial-port discovery through `pyserial`.
 - Firmware compilation and upload through the bundled `arduino-cli`.
 - Automatic installation of the Arduino AVR core and the `Encoder` library.
@@ -133,6 +138,18 @@ python gui\main.py
 The application discovers available serial ports when it starts. Use the
 refresh button if the Arduino is connected after the application launches.
 
+To use **Zoom/Scroll** mode:
+
+1. Select **Zoom/Scroll**.
+2. Rotate the encoder to scroll.
+3. Hold the encoder button for five seconds to activate Zoom mode.
+4. Rotate right or left to zoom in or out.
+5. Hold the encoder button for five seconds again to return to Scroll mode.
+
+Encoderino updates the in-app status and log when the mode changes. If the
+application is minimized to the system tray, it also displays a Windows tray
+notification.
+
 ## Flashing the Firmware
 
 The firmware source is located at [firmware/firmware.ino](./firmware/firmware.ino).
@@ -184,7 +201,7 @@ Arduino Uno firmware
 Encoderino Python GUI
       |
       +--> Audio Master actions
-      +--> Zoom/Scroll actions (planned)
+      +--> Scroll and latched zoom actions
       +--> Virtual Desktop actions (planned)
       |
       +--> Arduino CLI compile/upload workflow
@@ -209,7 +226,7 @@ encoderino/
 │   └── icons/
 │       └── *-white.svg
 ├── Encoderino.spec
-├── RELEASE_NOTES_v1.0.0-beta.md
+├── RELEASE_NOTES_v1.1.0.md
 ├── requirements.txt
 └── README.md
 ```

@@ -27,6 +27,7 @@ class EncoderApp:
         self.is_running = False
         self.flash_running = False
         self.reconnect_after_flash = False
+        self.zoom_modifier_active = False
         self.tray_icon = None
         self.tray_thread = None
         if getattr(sys, "frozen", False):
@@ -171,6 +172,14 @@ class EncoderApp:
         self.firmware_log.insert("end", message + "\n")
         self.firmware_log.see("end")
         self.firmware_log.config(state="disabled")
+
+    def notify_mode_change(self, zoom_active):
+        mode = "Zoom" if zoom_active else "Scroll"
+        message = f"Modalità encoder: {mode}"
+        self.root.after(0, self.status_var.set, message)
+        self.root.after(0, self.append_firmware_log, message)
+        if self.tray_icon is not None:
+            self.tray_icon.notify(message, "Encoderino")
 
     def run_cli_command(self, command):
         process = subprocess.Popen(
@@ -334,10 +343,20 @@ class EncoderApp:
             elif cmd == "ENC_CLICK":
                 pyautogui.press("playpause") # <-- MODIFICATO QUI: da volumemute a playpause
         elif current_mode == "Zoom/Scroll":
-            if cmd == "ENC_RIGHT":
-                pyautogui.scroll(-2) # Scroll giù (o zoom out)
+            if cmd == "ENC_MODIFIER_ON":
+                self.zoom_modifier_active = True
+                self.notify_mode_change(True)
+            elif cmd == "ENC_MODIFIER_OFF":
+                self.zoom_modifier_active = False
+                self.notify_mode_change(False)
+            elif cmd == "ENC_RIGHT" and self.zoom_modifier_active:
+                pyautogui.hotkey("ctrl", "+")
+            elif cmd == "ENC_LEFT" and self.zoom_modifier_active:
+                pyautogui.hotkey("ctrl", "-")
+            elif cmd == "ENC_RIGHT":
+                pyautogui.scroll(-5) # Scroll giù (o zoom out)
             elif cmd == "ENC_LEFT":
-                pyautogui.scroll(2)  # Scroll sù (o zoom in)
+                pyautogui.scroll(5)  # Scroll sù (o zoom in)
             elif cmd == "ENC_CLICK":
                 pyautogui.hotkey('ctrl', '0') # Reset zoom
 

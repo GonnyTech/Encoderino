@@ -12,6 +12,11 @@ long oldPosition = -999;
 int lastButtonState = HIGH;
 unsigned long lastDebounceTime = 0;
 unsigned long debounceDelay = 50; // Antirimbalzo per il pulsante
+unsigned long buttonPressedAt = 0;
+const unsigned long modifierHoldTime = 5000;
+bool modifierSent = false;
+bool modifierActive = false;
+int actualButtonState = HIGH;
 
 void setup() {
   Serial.begin(9600);
@@ -39,7 +44,7 @@ void loop() {
     oldPosition = newPosition;
   }
 
-  // --- 2. GESTIONE PULSANTE (CLICK) ---
+  // --- 2. GESTIONE PULSANTE (CLICK E MODIFICATORE) ---
   int reading = digitalRead(PIN_BUTTON);
 
   // Se lo stato del pulsante è cambiato (considerando il debounce)
@@ -48,14 +53,23 @@ void loop() {
   }
 
   if ((millis() - lastDebounceTime) > debounceDelay) {
-    // Se il pulsante è premuto (LOW a causa del PULLUP)
-    static int actualState = HIGH;
-    if (reading != actualState) {
-      actualState = reading;
-      if (actualState == LOW) {
+    if (reading != actualButtonState) {
+      actualButtonState = reading;
+      if (actualButtonState == LOW) {
+        buttonPressedAt = millis();
+        modifierSent = false;
+      } else if (!modifierSent) {
         Serial.println("ENC_CLICK");
       }
     }
   }
+
+  if (actualButtonState == LOW && !modifierSent &&
+      millis() - buttonPressedAt >= modifierHoldTime) {
+    modifierActive = !modifierActive;
+    Serial.println(modifierActive ? "ENC_MODIFIER_ON" : "ENC_MODIFIER_OFF");
+    modifierSent = true;
+  }
+
   lastButtonState = reading;
 }
