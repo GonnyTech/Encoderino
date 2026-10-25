@@ -7,3 +7,4 @@ dist/
 RELEASE_*.md
 installer/
 installer/Encoderino.iss
+HANDOVER_*.md
