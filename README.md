@@ -52,7 +52,7 @@ application is minimized to the tray.
 
 ## Hardware Requirements
 
-- Arduino Uno
+- Arduino or Arduino-compatible board
 - Rotary encoder with push button
 - USB cable for the Arduino Uno
 - Five jumper-wire connections
@@ -158,7 +158,7 @@ To flash it from the GUI:
 
 1. Connect the Arduino Uno by USB.
 2. Select its COM port in Encoderino.
-3. Click **Compila e carica firmware**.
+3. Click **Aggiorna Firmware**.
 4. Review the firmware log for board detection, compilation, and upload
    results.
 
